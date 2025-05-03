@@ -33,4 +33,22 @@ public class CategoryService {
         categoryRepository.deleteById(id);
     }
 
+    //Metodo para verificar si un producto es menor al un valor minimo dado
+    //(osea que no esta en el stock de inventario)
+    public boolean productWithLowStock(Long categoryId, int minStock) {
+        
+        Category category = categoryRepository.findById(categoryId)
+            .orElseThrow(() -> new RuntimeException("Category not found"));
+    
+        
+        if (category.getProducts() == null || category.getProducts().isEmpty()) {
+            return false; 
+        }
+    
+       
+        return category.getProducts().stream()
+            .anyMatch(product -> product.getStock() < minStock);
+    }
+
+
 }
